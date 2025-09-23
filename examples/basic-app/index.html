@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VentureVerse Basic App Example</title>
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://ventureverse.com https://*.ventureverse.com;">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .status.loading {
+            background: rgba(255, 193, 7, 0.2);
+            border-left: 4px solid #ffc107;
+        }
+        
+        .status.success {
+            background: rgba(40, 167, 69, 0.2);
+            border-left: 4px solid #28a745;
+        }
+        
+        .status.error {
+            background: rgba(220, 53, 69, 0.2);
+            border-left: 4px solid #dc3545;
+        }
+        
+        .user-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .credit-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .credit-box {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .credit-amount {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .expensive {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+        
+        .logs {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .log-info { background: rgba(33, 150, 243, 0.2); }
+        .log-success { background: rgba(76, 175, 80, 0.2); }
+        .log-error { background: rgba(244, 67, 54, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 VentureVerse Basic App</h1>
+            <p>Example integration with the VentureVerse SDK</p>
+        </div>
+
+        <div id="status" class="status loading">
+            🔄 Initializing SDK...
+        </div>
+
+        <div id="userSection" style="display: none;">
+            <div class="user-card">
+                <h2>👤 User Profile</h2>
+                <div id="userInfo"></div>
+            </div>
+
+            <div class="credit-info">
+                <div class="credit-box">
+                    <div class="credit-amount" id="monthlyCredits">--</div>
+                    <div>Monthly Credits</div>
+                </div>
+                <div class="credit-box">
+                    <div class="credit-amount" id="topupCredits">--</div>
+                    <div>Top-up Credits</div>
+                </div>
+                <div class="credit-box">
+                    <div class="credit-amount" id="totalCredits">--</div>
+                    <div>Total Available</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button onclick="refreshProfile()">🔄 Refresh Profile</button>
+                <button onclick="refreshCredits()">💰 Refresh Credits</button>
+                <button onclick="useCheapFeature()">✨ Cheap Feature ($0.10)</button>
+                <button onclick="useExpensiveFeature()" class="expensive">🚀 Premium Feature ($1.00)</button>
+                <button onclick="estimateExpensive()">📊 Estimate Premium Cost</button>
+                <button onclick="trackActivity()">📈 Track Activity</button>
+            </div>
+        </div>
+
+        <div class="logs">
+            <h3>📋 Activity Log</h3>
+            <div id="logs"></div>
+        </div>
+    </div>
+
+    <!-- Load VentureVerse SDK -->
+    <script src="../src/ventureverse-sdk.js"></script>
+    
+    <script>
+        // 🔑 Replace these with your actual credentials
+        const APP_CONFIG = {
+            appId: 'example_demo123',
+            encryptionKey: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2',
+            debug: true
+        };
+
+        let sdk;
+        let user = null;
+        let credits = null;
+
+        // Logging functions
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('logs');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${timestamp}] ${message}`;
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${type.toUpperCase()}]`, message);
+        }
+
+        function setStatus(message, type = 'loading') {
+            const statusElement = document.getElementById('status');
+            statusElement.textContent = message;
+            statusElement.className = `status ${type}`;
+        }
+
+        // Initialize the app
+        async function initializeApp() {
+            try {
+                log('Creating VentureVerse SDK instance...');
+                sdk = new VentureVerseSDK(APP_CONFIG);
+
+                // Set up event listeners
+                sdk.addEventListener('userProfileUpdated', (userData) => {
+                    log('User profile updated via event', 'success');
+                    updateUserDisplay(userData);
+                });
+
+                sdk.addEventListener('creditBalanceUpdated', (creditData) => {
+                    log('Credit balance updated via event', 'success');
+                    updateCreditDisplay(creditData);
+                });
+
+                sdk.addEventListener('creditsDeducted', (data) => {
+                    log(`Credits deducted: ${data.amount} (${data.description})`, 'success');
+                    refreshCredits();
+                });
+
+                sdk.addEventListener('error', (error) => {
+                    log(`SDK Error: ${error.message}`, 'error');
+                });
+
+                log('Initializing SDK...');
+                await sdk.initialize();
+
+                log('Loading user profile...');
+                user = await sdk.getUserProfile();
+                updateUserDisplay(user);
+
+                log('Loading credit balance...');
+                credits = await sdk.getCreditBalance();
+                updateCreditDisplay(credits);
+
+                setStatus('✅ App initialized successfully!', 'success');
+                document.getElementById('userSection').style.display = 'block';
+
+                log('App initialization complete!', 'success');
+
+            } catch (error) {
+                log(`Initialization failed: ${error.message}`, 'error');
+                setStatus(`❌ Initialization failed: ${error.message}`, 'error');
+            }
+        }
+
+        function updateUserDisplay(userData) {
+            const userInfo = document.getElementById('userInfo');
+            userInfo.innerHTML = `
+                <p><strong>Name:</strong> ${userData.first_name} ${userData.last_name}</p>
+                <p><strong>Email:</strong> ${userData.email}</p>
+                <p><strong>Roles:</strong> ${userData.user_roles.join(', ')}</p>
+                <p><strong>Tier:</strong> ${userData.tier_id || 'Basic'}</p>
+            `;
+        }
+
+        function updateCreditDisplay(creditData) {
+            const monthly = creditData.monthly_credit_balance || 0;
+            const topup = creditData.topup_credit_balance || creditData.top_up_credit_balance || 0;
+            const total = monthly + topup;
+
+            document.getElementById('monthlyCredits').textContent = monthly;
+            document.getElementById('topupCredits').textContent = topup;
+            document.getElementById('totalCredits').textContent = total;
+        }
+
+        // Action functions
+        async function refreshProfile() {
+            try {
+                log('Refreshing user profile...');
+                user = await sdk.refreshUserProfile();
+                updateUserDisplay(user);
+                log('Profile refreshed successfully', 'success');
+            } catch (error) {
+                log(`Failed to refresh profile: ${error.message}`, 'error');
+            }
+        }
+
+        async function refreshCredits() {
+            try {
+                log('Refreshing credit balance...');
+                credits = await sdk.refreshCreditBalance();
+                updateCreditDisplay(credits);
+                log('Credits refreshed successfully', 'success');
+            } catch (error) {
+                log(`Failed to refresh credits: ${error.message}`, 'error');
+            }
+        }
+
+        async function useCheapFeature() {
+            try {
+                log('Using cheap feature...');
+                const result = await sdk.deductCredits(0.10, 'Cheap Feature Usage');
+                
+                if (result.success !== false) {
+                    log(`Cheap feature used! Credits deducted: ${result.credits_deducted}`, 'success');
+                    updateCreditDisplay(result.remaining_balance || credits);
+                } else {
+                    log(`Feature failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                log(`Cheap feature failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function useExpensiveFeature() {
+            try {
+                log('Using expensive premium feature...');
+                const result = await sdk.deductCredits(1.00, 'Premium Feature Usage');
+                
+                if (result.success !== false) {
+                    log(`Premium feature used! Credits deducted: ${result.credits_deducted}`, 'success');
+                    updateCreditDisplay(result.remaining_balance || credits);
+                } else {
+                    log(`Premium feature failed: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                log(`Premium feature failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function estimateExpensive() {
+            try {
+                log('Estimating premium feature cost...');
+                const estimation = await sdk.estimateCredits(1.00, 'Premium Feature Estimation');
+                log(`Premium feature would cost: ${estimation.credits} credits ($${estimation.cost})`, 'info');
+            } catch (error) {
+                log(`Cost estimation failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function trackActivity() {
+            try {
+                log('Tracking user activity...');
+                await sdk.trackActivity('button_click', {
+                    button: 'track_activity',
+                    timestamp: new Date().toISOString(),
+                    user_agent: navigator.userAgent
+                });
+                log('Activity tracked successfully', 'success');
+            } catch (error) {
+                log(`Activity tracking failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Start the app
+        window.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Debug: Log URL parameters
+        log(`Running in iframe mode: ${new URLSearchParams(window.location.search).get('iframe_mode') === 'true'}`);
+        log(`Current URL: ${window.location.href}`);
+    </script>
+</body>
+</html>

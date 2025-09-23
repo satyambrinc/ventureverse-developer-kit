@@ -1,0 +1,51 @@
+{
+  "name": "@ventureverse/sdk",
+  "version": "1.0.0",
+  "description": "Official SDK for integrating applications with the VentureVerse platform",
+  "main": "src/ventureverse-sdk.js",
+  "types": "src/types.d.ts",
+  "files": [
+    "src/",
+    "docs/",
+    "examples/",
+    "templates/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "echo \"Testing SDK functionality...\"",
+    "build": "echo \"SDK is ready for distribution\"",
+    "dev": "echo \"Development server for examples\"",
+    "example:basic": "open examples/iframe-test.html",
+    "example:react": "cd templates/react-template && npm start",
+    "example:vue": "cd templates/vue-template && npm run serve"
+  },
+  "keywords": [
+    "ventureverse",
+    "sdk",
+    "iframe",
+    "integration",
+    "credits",
+    "authentication",
+    "third-party",
+    "developer-kit"
+  ],
+  "author": "VentureVerse Team <dev-support@ventureverse.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/ventureverse/developer-kit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ventureverse/developer-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ventureverse/developer-kit/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "peerDependencies": {},
+  "devDependencies": {},
+  "publishConfig": {
+    "access": "public"
+  }
+}

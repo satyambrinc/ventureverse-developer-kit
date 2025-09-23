@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Test App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .param {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+        .param strong {
+            color: #4CAF50;
+        }
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .error {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Iframe Integration Test</h1>
+        
+        <div class="user-info">
+            <h3>User Context Information:</h3>
+            <div id="userInfo">Loading...</div>
+        </div>
+
+        <div class="user-info">
+            <h3>All URL Parameters:</h3>
+            <div id="allParams">Loading...</div>
+        </div>
+
+        <div class="user-info">
+            <h3>Integration Status:</h3>
+            <div id="status">Checking...</div>
+        </div>
+    </div>
+
+    <script>
+        function getURLParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const params = {};
+            for (const [key, value] of urlParams.entries()) {
+                params[key] = value;
+            }
+            return params;
+        }
+
+        function displayUserInfo() {
+            const params = getURLParameters();
+            const userInfoDiv = document.getElementById('userInfo');
+            const allParamsDiv = document.getElementById('allParams');
+            const statusDiv = document.getElementById('status');
+
+            // Display user-specific info
+            let userInfoHTML = '';
+            if (params.user_id) {
+                userInfoHTML += `<div class="param"><strong>User ID:</strong> ${params.user_id}</div>`;
+            }
+            if (params.user_email) {
+                userInfoHTML += `<div class="param"><strong>Email:</strong> ${params.user_email}</div>`;
+            }
+            if (params.user_name) {
+                userInfoHTML += `<div class="param"><strong>Name:</strong> ${params.user_name}</div>`;
+            }
+
+            if (userInfoHTML === '') {
+                userInfoHTML = '<div class="error">No user context found</div>';
+            }
+
+            userInfoDiv.innerHTML = userInfoHTML;
+
+            // Display all parameters
+            let allParamsHTML = '';
+            for (const [key, value] of Object.entries(params)) {
+                allParamsHTML += `<div class="param"><strong>${key}:</strong> ${value}</div>`;
+            }
+
+            if (allParamsHTML === '') {
+                allParamsHTML = '<div class="error">No URL parameters found</div>';
+            }
+
+            allParamsDiv.innerHTML = allParamsHTML;
+
+            // Display status
+            let statusHTML = '';
+            if (params.user_id && params.user_email) {
+                statusHTML = '<div class="success">✅ Iframe integration working! User context successfully passed.</div>';
+            } else if (Object.keys(params).length > 0) {
+                statusHTML = '<div class="error">⚠️ Partial integration - some parameters missing</div>';
+            } else {
+                statusHTML = '<div class="error">❌ No integration detected - no parameters passed</div>';
+            }
+
+            statusDiv.innerHTML = statusHTML;
+        }
+
+        // Display info when page loads
+        displayUserInfo();
+
+        // Debug current URL
+        console.log('Current URL:', window.location.href);
+        console.log('URL params:', getURLParameters());
+
+        // Also display parent window info if available
+        try {
+            if (window.parent !== window) {
+                console.log('Running inside iframe');
+                document.title = 'Iframe Test App (Inside Iframe)';
+            } else {
+                console.log('Running standalone');
+            }
+        } catch (e) {
+            console.log('Cross-origin iframe restrictions');
+        }
+    </script>
+</body>
+</html>

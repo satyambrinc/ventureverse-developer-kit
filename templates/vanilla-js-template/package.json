@@ -1,0 +1,21 @@
+{
+  "name": "ventureverse-vanilla-template",
+  "version": "1.0.0",
+  "description": "Vanilla JavaScript template for VentureVerse integration",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "python -m http.server 3000"
+  },
+  "dependencies": {
+    "@ventureverse/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0"
+  },
+  "keywords": ["ventureverse", "vanilla-js", "template"],
+  "author": "VentureVerse",
+  "license": "MIT"
+}

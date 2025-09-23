@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My VentureVerse App</title>
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://ventureverse.com https://*.ventureverse.com;">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>🚀 My VentureVerse App</h1>
+            <div id="status" class="status loading">Initializing...</div>
+        </header>
+
+        <main id="main-content" style="display: none;">
+            <section class="user-section">
+                <h2>User Profile</h2>
+                <div id="user-info" class="info-card"></div>
+            </section>
+
+            <section class="credit-section">
+                <h2>Credits</h2>
+                <div id="credit-info" class="info-card"></div>
+            </section>
+
+            <section class="actions-section">
+                <h2>Actions</h2>
+                <div class="action-buttons">
+                    <button onclick="useFeature()">Use Feature ($0.50)</button>
+                    <button onclick="trackUserAction()">Track Activity</button>
+                    <button onclick="refreshData()">Refresh Data</button>
+                </div>
+            </section>
+
+            <section class="logs-section">
+                <h2>Activity Log</h2>
+                <div id="activity-log" class="log-container"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
