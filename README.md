@@ -46,6 +46,18 @@ const user = await sdk.getUserProfile();
 await sdk.deductCredits(0.50, 'Feature usage');
 ```
 
+## 🔑 Getting Credentials
+
+Before you start, you need credentials from VentureVerse:
+
+1. **Email**: dev-support@ventureverse.com
+2. **Subject**: App Integration Request
+3. **Include**: Your name, app name, app description
+
+You'll receive your **App ID** and **Encryption Key** within 1-2 business days.
+
+See [HOW_TO_GET_CREDENTIALS.md](./HOW_TO_GET_CREDENTIALS.md) for details.
+
 ## 📁 Repository Structure
 
 ```
@@ -55,14 +67,12 @@ ventureverse-developer-kit/
 │   └── types.d.ts             # TypeScript definitions
 ├── examples/
 │   ├── basic-app/             # Simple integration example
-│   ├── react-template/        # React.js template
-│   ├── vue-template/          # Vue.js template
 │   └── iframe-test.html       # Testing playground
 ├── docs/
 │   ├── INTEGRATION_GUIDE.md   # Complete integration guide
 │   └── API_REFERENCE.md       # API documentation
 └── templates/
-    └── starter-kit/           # Boilerplate project
+    └── vanilla-js-template/   # Ready-to-use template
 ```
 
 ## 🧪 Testing Your Integration
