@@ -1,52 +1,25 @@
 # 🚀 VentureVerse Developer Kit - Quick Start
 
-## For VentureVerse Team
+## Getting Your Credentials
 
-### 1. Generate Developer Credentials (2 minutes)
+Before you start, you need credentials from VentureVerse:
 
-```bash
-# Navigate to developer kit
-cd ventureverse-developer-kit
+**📧 Email:** dev-support@ventureverse.com  
+**Subject:** VentureVerse App Integration Request
 
-# Generate credentials for a new developer
-node credential-generator.js "John Smith" "AI Chat App" "john@company.com"
+**Include:**
+- Your name and email
+- Your app name and description
+- Your app's website/URL
 
-# This will:
-# ✅ Generate unique app ID and encryption key
-# ✅ Update app-registry.json
-# ✅ Create email template
-# ✅ Show integration code
-```
-
-### 2. Update Your Iframe Service
-
-Add the new app to your iframe validation (copy from `iframe-validation-addon.ts`):
-
-```javascript
-// In your src/services/iframe.ts, add to REGISTERED_APPS:
-'newapp_abc123': {
-  appId: 'newapp_abc123',
-  encryptionKey: 'generated_key_here',
-  developerName: 'John Smith',
-  appName: 'AI Chat App',
-  developerEmail: 'john@company.com',
-  status: 'active',
-  createdAt: '2024-01-15T10:30:00.000Z'
-}
-```
-
-### 3. Send Email to Developer
-
-Use the generated email template from `email-{appId}.txt`
+You'll receive your **App ID** and **Encryption Key** within 1-2 business days.
 
 ---
 
-## For Third-Party Developers
+## Option 1: Quick Test (No Setup)
 
-### Option 1: Quick Test (No Setup)
-
-1. **Download SDK file**: Copy `src/ventureverse-sdk.js`
-2. **Use example**: Open `examples/basic-app/index.html`
+1. **Download the SDK**: Copy `src/ventureverse-sdk.js` to your project
+2. **Use the example**: Open `examples/basic-app/index.html`
 3. **Replace credentials** with yours:
    ```javascript
    const APP_CONFIG = {
@@ -54,8 +27,11 @@ Use the generated email template from `email-{appId}.txt`
        encryptionKey: 'your_encryption_key_here'
    };
    ```
+4. **Open in browser** and test!
 
-### Option 2: Full Template Setup
+---
+
+## Option 2: Full Template Setup
 
 ```bash
 # 1. Clone or download the developer kit
@@ -76,7 +52,9 @@ npx vite
 # http://localhost:3000?iframe_mode=true&user_id=123&user_email=test@example.com&user_name=Test%20User
 ```
 
-### Option 3: NPM Installation (Coming Soon)
+---
+
+## Option 3: NPM Installation (Coming Soon)
 
 ```bash
 npm install @ventureverse/sdk
@@ -110,11 +88,6 @@ http://localhost:3000
 http://localhost:3000?iframe_mode=true&user_id=123&user_email=test@example.com&user_name=John%20Doe
 ```
 
-**With Encrypted Parameters:**
-```
-http://localhost:3000?iframe_mode=true&user_id=encrypted_value&user_email=encrypted_value&user_name=encrypted_value
-```
-
 ### What to Test
 
 - ✅ SDK initialization
@@ -129,8 +102,6 @@ http://localhost:3000?iframe_mode=true&user_id=encrypted_value&user_email=encryp
 
 ## Production Deployment
 
-### For Developers
-
 1. **Update configuration**:
    ```javascript
    const APP_CONFIG = {
@@ -144,19 +115,12 @@ http://localhost:3000?iframe_mode=true&user_id=encrypted_value&user_email=encryp
 3. **Notify VentureVerse** of your production URL
 4. **Test iframe embedding** from VentureVerse platform
 
-### For VentureVerse
-
-1. **Add production origins** to your iframe service
-2. **Update CORS settings** if needed
-3. **Monitor app usage** via console logs or analytics
-
 ---
 
 ## Support & Resources
 
 - 📖 **Full Documentation**: `docs/INTEGRATION_GUIDE.md`
 - 🔧 **API Reference**: `docs/API_REFERENCE.md`
-- 🛠️ **Simple Setup**: `docs/SIMPLE_SETUP.md`
 - 🧪 **Examples**: `examples/` directory
 - 📧 **Support**: dev-support@ventureverse.com
 
@@ -188,13 +152,6 @@ try {
 }
 ```
 
-### Issue: App not validating
-**Solution**: Ensure credentials are correct and app is registered
-```javascript
-// Check in browser console for validation errors
-// Contact VentureVerse team if app status is 'suspended'
-```
-
 ---
 
-**Ready to start? Use the credential generator and send the email template to your first developer! 🎉**
+**Ready to build? Request your credentials and start coding! 🎉**
