@@ -50,8 +50,9 @@ await sdk.deductCredits(0.50, 'Feature usage');
 
 Before you start, you need credentials from VentureVerse:
 
-1. **Subject**: App Integration Request
-2. **Include**: Your name, app name, app description
+1. **Venture Verse Credentials** is currently available by private invitation only.
+2. **Subject**: App Integration Request
+3. **Include**: Your name, app name, app description
 
 You'll receive your **App ID** and **Encryption Key** within 1-2 business days.
 
