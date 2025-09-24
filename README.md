@@ -50,9 +50,8 @@ await sdk.deductCredits(0.50, 'Feature usage');
 
 Before you start, you need credentials from VentureVerse:
 
-1. **Email**: dev-support@ventureverse.com
-2. **Subject**: App Integration Request
-3. **Include**: Your name, app name, app description
+1. **Subject**: App Integration Request
+2. **Include**: Your name, app name, app description
 
 You'll receive your **App ID** and **Encryption Key** within 1-2 business days.
 
@@ -97,8 +96,7 @@ file:///path/to/iframe-test.html?iframe_mode=true&user_id=123&user_email=test@ex
 
 - **Documentation**: Full integration guide included
 - **Examples**: Working templates and demos
-- **Community**: Developer Discord server
-- **Email**: dev-support@ventureverse.com
+
 
 ## 🔄 Version History
 
