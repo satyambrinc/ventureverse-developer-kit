@@ -1,19 +1,5 @@
 # 🚀 VentureVerse Developer Kit - Quick Start
 
-## Getting Your Credentials
-
-Before you start, you need credentials from VentureVerse:
-
-**📧 Email:** dev-support@ventureverse.com  
-**Subject:** VentureVerse App Integration Request
-
-**Include:**
-- Your name and email
-- Your app name and description
-- Your app's website/URL
-
-You'll receive your **App ID** and **Encryption Key** within 1-2 business days.
-
 ---
 
 ## Option 1: Quick Test (No Setup)
