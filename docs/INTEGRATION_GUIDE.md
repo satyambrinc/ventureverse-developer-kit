@@ -927,8 +927,6 @@ class ErrorRecovery {
 
 1. **Documentation**: This guide and API documentation
 2. **Demo App**: `/dummy-app` for testing and examples
-3. **Support Email**: dev-support@ventureverse.com
-4. **Developer Discord**: [Join our community](https://discord.gg/ventureverse)
 
 ### Resources
 
