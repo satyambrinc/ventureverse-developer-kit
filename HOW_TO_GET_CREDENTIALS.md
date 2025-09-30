@@ -9,8 +9,7 @@ To integrate your app with VentureVerse, you need:
 ## 📧 Request Credentials
 
 **Contact the VentureVerse team:**
-- **Email**: dev-support@ventureverse.com
-- **Subject**: VentureVerse App Integration Request
+- Closed group only
 
 **Include in your request:**
 1. Your name and email
@@ -54,7 +53,3 @@ Once you have your credentials:
 - **Keep your credentials secure** - Never commit them to public repositories
 - **Use environment variables** in production
 - **Don't share credentials** with others
-
-## ❓ Questions?
-
-Contact us at dev-support@ventureverse.com
