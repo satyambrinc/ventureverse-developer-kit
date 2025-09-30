@@ -108,7 +108,6 @@ http://localhost:3000?iframe_mode=true&user_id=123&user_email=test@example.com&u
 - 📖 **Full Documentation**: `docs/INTEGRATION_GUIDE.md`
 - 🔧 **API Reference**: `docs/API_REFERENCE.md`
 - 🧪 **Examples**: `examples/` directory
-- 📧 **Support**: dev-support@ventureverse.com
 
 ---
 
