@@ -20,21 +20,24 @@ new VentureVerseSDK(options)
 
 **Parameters:**
 - `options` (Object, optional): Configuration options
-  - `appId` (string): Your application ID
+  - `apiKey` (string): Your API key from Developer Console (starts with 'vv_')
   - `debug` (boolean): Enable debug logging (default: false)
   - `timeout` (number): Request timeout in milliseconds (default: 10000)
   - `retryAttempts` (number): Number of retry attempts (default: 3)
   - `encryptionKey` (string): Encryption key for secure params
   - `enableEncryption` (boolean): Enable parameter encryption (default: true)
+  - `baseUrl` (string): Base URL for API validation (default: current origin)
 
 **Example:**
 ```javascript
 const sdk = new VentureVerseSDK({
-  appId: 'my-app-123',
+  apiKey: 'vv_abc123def456789...',
   debug: true,
-  encryptionKey: 'my-secret-key'
+  encryptionKey: process.env.VV_ENCRYPTION_KEY
 });
 ```
+
+**Note:** For backward compatibility, `appId` is still accepted but deprecated in favor of `apiKey`.
 
 ### Core Methods
 
