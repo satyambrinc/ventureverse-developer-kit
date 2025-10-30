@@ -7,13 +7,13 @@ Welcome to the VentureVerse Developer Kit! This package provides everything you 
 ### Installation
 
 ```bash
-npm install @ventureverse/sdk
+npm install @satyambrinc/ventureverse-sdk
 ```
 
 ### Basic Usage
 
 ```javascript
-import { VentureVerseSDKSecure } from '@ventureverse/sdk';
+import { VentureVerseSDKSecure } from '@satyambrinc/ventureverse-sdk';
 
 const sdk = new VentureVerseSDKSecure({
   apiKey: 'vv_your_api_key_here',
@@ -71,7 +71,7 @@ To get access:
 ### 1. Initialize the SDK
 
 ```javascript
-import { VentureVerseSDKSecure } from '@ventureverse/sdk';
+import { VentureVerseSDKSecure } from '@satyambrinc/ventureverse-sdk';
 
 const sdk = new VentureVerseSDKSecure({
   apiKey: process.env.VENTUREVERSE_API_KEY, // Store securely

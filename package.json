@@ -1,5 +1,5 @@
 {
-  "name": "@ventureverse/sdk",
+  "name": "@satyambrinc/ventureverse-sdk",
   "version": "1.0.0",
   "description": "Official SDK for integrating applications with the VentureVerse platform",
   "main": "src/ventureverse-sdk.js",
