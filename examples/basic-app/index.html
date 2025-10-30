@@ -187,15 +187,16 @@
         </div>
     </div>
 
-    <!-- Load VentureVerse SDK -->
-    <script src="../src/ventureverse-sdk.js"></script>
+    <!-- Load VentureVerse SDK Secure -->
+    <script src="../../src/ventureverse-sdk-secure.js"></script>
     
     <script>
         // 🔑 Replace these with your actual credentials
         const APP_CONFIG = {
-            appId: 'example_demo123',
-            encryptionKey: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2',
-            debug: true
+            apiKey: getApiKeyFromUrl() || 'vv_demo_key_12345',
+            apiSecret: getApiSecretFromUrl() || 'vv_secret_demo_secret_67890',
+            debug: true,
+            enableEncryption: true
         };
 
         let sdk;
@@ -223,8 +224,8 @@
         // Initialize the app
         async function initializeApp() {
             try {
-                log('Creating VentureVerse SDK instance...');
-                sdk = new VentureVerseSDK(APP_CONFIG);
+                log('Creating VentureVerse SDK Secure instance...');
+                sdk = new VentureVerseSDKSecure(APP_CONFIG);
 
                 // Set up event listeners
                 sdk.addEventListener('userProfileUpdated', (userData) => {
@@ -248,13 +249,14 @@
 
                 log('Initializing SDK...');
                 await sdk.initialize();
+                await sdk.loadInitialData();
 
                 log('Loading user profile...');
                 user = await sdk.getUserProfile();
                 updateUserDisplay(user);
 
                 log('Loading credit balance...');
-                credits = await sdk.getCreditBalance();
+                credits = await sdk.getCredits();
                 updateCreditDisplay(credits);
 
                 setStatus('✅ App initialized successfully!', 'success');
@@ -271,20 +273,19 @@
         function updateUserDisplay(userData) {
             const userInfo = document.getElementById('userInfo');
             userInfo.innerHTML = `
-                <p><strong>Name:</strong> ${userData.first_name} ${userData.last_name}</p>
-                <p><strong>Email:</strong> ${userData.email}</p>
-                <p><strong>Roles:</strong> ${userData.user_roles.join(', ')}</p>
-                <p><strong>Tier:</strong> ${userData.tier_id || 'Basic'}</p>
+                <p><strong>Name:</strong> ${userData.name || userData.first_name + ' ' + userData.last_name || 'Demo User'}</p>
+                <p><strong>Email:</strong> ${userData.email || 'demo@example.com'}</p>
+                <p><strong>Tier:</strong> ${userData.tier?.name || userData.tier_id || 'Free'}</p>
             `;
         }
 
         function updateCreditDisplay(creditData) {
-            const monthly = creditData.monthly_credit_balance || 0;
-            const topup = creditData.topup_credit_balance || creditData.top_up_credit_balance || 0;
-            const total = monthly + topup;
-
-            document.getElementById('monthlyCredits').textContent = monthly;
-            document.getElementById('topupCredits').textContent = topup;
+            // Handle both old and new credit data structures
+            const total = typeof creditData === 'number' ? creditData : 
+                         (creditData.monthly_credit_balance || 0) + (creditData.topup_credit_balance || creditData.top_up_credit_balance || 0);
+            
+            document.getElementById('monthlyCredits').textContent = typeof creditData === 'number' ? '--' : (creditData.monthly_credit_balance || 0);
+            document.getElementById('topupCredits').textContent = typeof creditData === 'number' ? '--' : (creditData.topup_credit_balance || creditData.top_up_credit_balance || 0);
             document.getElementById('totalCredits').textContent = total;
         }
 
@@ -292,7 +293,7 @@
         async function refreshProfile() {
             try {
                 log('Refreshing user profile...');
-                user = await sdk.refreshUserProfile();
+                user = await sdk.getUserProfile();
                 updateUserDisplay(user);
                 log('Profile refreshed successfully', 'success');
             } catch (error) {
@@ -303,7 +304,7 @@
         async function refreshCredits() {
             try {
                 log('Refreshing credit balance...');
-                credits = await sdk.refreshCreditBalance();
+                credits = await sdk.getCredits();
                 updateCreditDisplay(credits);
                 log('Credits refreshed successfully', 'success');
             } catch (error) {
@@ -369,6 +370,17 @@
 
         // Start the app
         window.addEventListener('DOMContentLoaded', initializeApp);
+
+        // Utility functions for URL parameters
+        function getApiKeyFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('api_key');
+        }
+
+        function getApiSecretFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('api_secret');
+        }
 
         // Debug: Log URL parameters
         log(`Running in iframe mode: ${new URLSearchParams(window.location.search).get('iframe_mode') === 'true'}`);

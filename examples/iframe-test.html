@@ -73,8 +73,17 @@
             <h3>Integration Status:</h3>
             <div id="status">Checking...</div>
         </div>
+
+        <div class="user-info" id="sdkSection" style="display: none;">
+            <h3>SDK Test Results:</h3>
+            <div id="sdkStatus">Testing SDK...</div>
+            <button onclick="testSDK()" style="margin-top: 10px; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Test SDK Connection</button>
+        </div>
     </div>
 
+    <!-- Load VentureVerse SDK Secure -->
+    <script src="../src/ventureverse-sdk-secure.js"></script>
+    
     <script>
         function getURLParameters() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -134,8 +143,61 @@
             statusDiv.innerHTML = statusHTML;
         }
 
+        // SDK Testing
+        let sdk = null;
+
+        async function testSDK() {
+            const sdkStatusDiv = document.getElementById('sdkStatus');
+            const params = getURLParameters();
+            
+            try {
+                sdkStatusDiv.innerHTML = '<div style="color: #ffc107;">🔄 Initializing SDK...</div>';
+                
+                // Get API credentials from URL parameters or use demo values
+                const apiKey = params.api_key || 'vv_demo_key_12345';
+                const apiSecret = params.api_secret || 'vv_secret_demo_secret_67890';
+                
+                sdk = new VentureVerseSDKSecure({
+                    apiKey: apiKey,
+                    apiSecret: apiSecret,
+                    debug: true,
+                    enableEncryption: true
+                });
+
+                await sdk.initialize();
+                await sdk.loadInitialData();
+                
+                sdkStatusDiv.innerHTML = '<div class="success">✅ SDK initialized successfully!</div>';
+                
+                // Try to get user profile
+                try {
+                    const userProfile = await sdk.getUserProfile();
+                    sdkStatusDiv.innerHTML += `<div style="margin-top: 10px;"><strong>User Profile:</strong> ${userProfile.name || 'Demo User'} (${userProfile.email || 'demo@example.com'})</div>`;
+                } catch (error) {
+                    sdkStatusDiv.innerHTML += `<div style="color: #ffc107; margin-top: 10px;">⚠️ User profile: Using demo data (${error.message})</div>`;
+                }
+                
+                // Try to get credits
+                try {
+                    const credits = await sdk.getCredits();
+                    sdkStatusDiv.innerHTML += `<div style="margin-top: 10px;"><strong>Credits:</strong> ${credits}</div>`;
+                } catch (error) {
+                    sdkStatusDiv.innerHTML += `<div style="color: #ffc107; margin-top: 10px;">⚠️ Credits: Using demo data (${error.message})</div>`;
+                }
+                
+            } catch (error) {
+                console.error('SDK Test Error:', error);
+                sdkStatusDiv.innerHTML = `<div class="error">❌ SDK test failed: ${error.message}</div>`;
+            }
+        }
+
         // Display info when page loads
         displayUserInfo();
+
+        // Show SDK section after basic info is loaded
+        setTimeout(() => {
+            document.getElementById('sdkSection').style.display = 'block';
+        }, 500);
 
         // Debug current URL
         console.log('Current URL:', window.location.href);

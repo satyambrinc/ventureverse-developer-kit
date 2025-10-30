@@ -258,8 +258,14 @@ class ResourceManager {
  */
 export class VentureVerseSDKSecure {
   constructor(options = {}) {
-    if (!options.apiKey || !options.apiSecret) {
-      throw new Error('API key and secret are required');
+    if (!options.apiKey) {
+      throw new Error('API key is required');
+    }
+    
+    // API secret is optional for backward compatibility
+    // but recommended for enhanced security
+    if (!options.apiSecret) {
+      console.warn('⚠️ API secret not provided. For enhanced security, use both API key and secret.');
     }
 
     this.options = {
@@ -360,6 +366,24 @@ export class VentureVerseSDKSecure {
     const messageHandler = this.handleSecureMessage.bind(this);
     this.resourceManager.addEventListener(window, 'message', messageHandler);
     this.log('Secure message listener set up');
+  }
+
+  async loadInitialData() {
+    try {
+      this.log('Loading initial data from parent window...');
+      
+      // Try to get user profile from parent
+      await this.getUserProfile();
+      
+      // Try to get initial credit info
+      await this.getCredits();
+      
+      this.log('✅ Initial data loaded successfully');
+    } catch (error) {
+      this.log('⚠️ Failed to load initial data, using fallback:', error.message);
+      // Fallback to URL parameters
+      this.getURLParamsFallback();
+    }
   }
 
   handleSecureMessage(event) {
